@@ -9,8 +9,8 @@ public class KeyboardControls : MonoBehaviour {
 	KeyCode leftKey;
 	KeyCode rightKey;
 
-	int movement  = 0;
-	Vector3 speed = new Vector3(0.1f, 0.0f, 0.0f);
+	int movement = 0;
+	int speed    = 20;
 
 	void Start(){
 
@@ -44,17 +44,19 @@ public class KeyboardControls : MonoBehaviour {
 		if(leftCancel || rightCancel) Move(0);
 			
 		//otherwise start movin'!
-		else if(leftPressed)  Move(-1);
-		else if(rightPressed) Move(+1);
+		else if(leftPressed)  Move(+1);
+		else if(rightPressed) Move(-1);
 
 		//////////////////////////////////////////
 		// MOVEMENT TRANSFORM ////////////////////
 		//////////////////////////////////////////
 		//as long as there is movement, then apply it
 		if(movement != 0){
-			Vector3 currentPosition = transform.position;
-			Vector3 nextPosition    = currentPosition + (speed * movement);
-			transform.position      = nextPosition;
+			// Vector3 currentPosition = transform.position;
+			// Vector3 nextPosition    = currentPosition + (speed * movement);
+			// transform.position      = nextPosition;
+			float direction = (speed * Time.deltaTime) * movement;
+			transform.RotateAround(Vector3.zero, Vector3.up, direction);
 		}
 		
 	}
