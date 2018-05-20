@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class KeyboardControls : MonoBehaviour {
 
-	public string hand;
+	public string hand       = "Left";
+	public int speed         = 20;
+	public int runMultiplier = 2;
 
 	KeyCode leftKey;
 	KeyCode rightKey;
 	KeyCode runKey;
 
 	bool running;
-
 	int movement = 0;
-	int runspeed = 2;
-	int speed    = 20;
 
 	void Start(){
 
@@ -52,13 +51,13 @@ public class KeyboardControls : MonoBehaviour {
 		bool runPressed   = Input.GetKeyDown(runKey);
 
 		//if the signal has been given to stop - STOP FIRST.
-		if(leftCancel || rightCancel) Move(0);
+		if(leftCancel || rightCancel) movement = 0;
 			
 		//otherwise start movin'!
-		else if(leftPressed)  Move(+1);
-		else if(rightPressed) Move(-1);
+		else if(leftPressed)  movement = -1;
+		else if(rightPressed) movement = 1;
 
-		//update running modifier
+		//update running modifier separately
 		if(runCancel)        running = false;
 		else if (runPressed) running = true;
 
@@ -67,20 +66,15 @@ public class KeyboardControls : MonoBehaviour {
 		//////////////////////////////////////////
 		//as long as there is movement, then apply it
 		if(movement != 0){
-			// Vector3 currentPosition = transform.position;
-			// Vector3 nextPosition    = currentPosition + (speed * movement);
-			// transform.position      = nextPosition;
-			int multiplier  = running ? runspeed : 1;
+			//calculate move direction
+			int multiplier  = running ? runMultiplier : 1;
 			float direction = ((speed * multiplier) * Time.deltaTime) * movement;
-
-			Debug.Log("speed : " + (speed * multiplier) + running);
-
 			transform.RotateAround(Vector3.zero, Vector3.up, direction);
 		}
 		
 	}
 
-	void Move(int direction){
-		movement = direction;
+	void OnCollisionEnter(Collision col){
+		Debug.Log("agent seen!");
 	}
 }
