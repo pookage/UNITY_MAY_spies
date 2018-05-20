@@ -24,8 +24,15 @@ public class KeyboardControls : MonoBehaviour {
 	}
 
 	void Update(){
-		if(Input.GetKeyDown(leftKey))  MoveLeft();
-		if(Input.GetKeyDown(rightKey)) MoveRight();
+		//if the signal has been given to stop - STOP FIRST.
+		if(Input.GetKeyUp(leftKey) || Input.GetKeyUp(rightKey)){
+			Stop();
+		} 
+		//otherwise start movin'!
+		else if(Input.GetKeyDown(leftKey))    MoveLeft();
+		else if(Input.GetKeyDown(rightKey))   MoveRight();
+
+		
 	}
 
 	void MoveLeft(){
@@ -34,6 +41,10 @@ public class KeyboardControls : MonoBehaviour {
 
 	void MoveRight(){
 		Debug.Log("Move right");
+	}
+
+	void Stop(){
+		Debug.Log("Stop moving");
 	}
 
 }
