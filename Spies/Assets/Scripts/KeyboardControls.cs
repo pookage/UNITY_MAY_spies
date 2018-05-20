@@ -8,8 +8,12 @@ public class KeyboardControls : MonoBehaviour {
 
 	KeyCode leftKey;
 	KeyCode rightKey;
+	KeyCode runKey;
+
+	bool running;
 
 	int movement = 0;
+	int runspeed = 2;
 	int speed    = 20;
 
 	void Start(){
@@ -27,6 +31,11 @@ public class KeyboardControls : MonoBehaviour {
 		if(leftHand)   rightKey = KeyCode.D;
 		if(rightHand)  rightKey = KeyCode.L;
 		if(middleHand) rightKey = KeyCode.H;
+
+		//run key
+		if(leftHand)   runKey = KeyCode.LeftShift;
+		if(rightHand)  runKey = KeyCode.RightShift;
+		if(middleHand) runKey = KeyCode.Space;
 	}
 
 	void Update(){
@@ -36,9 +45,11 @@ public class KeyboardControls : MonoBehaviour {
 		////////////////////////////////////////
 		//check all of the necessary inputs
 		bool leftCancel   = Input.GetKeyUp(leftKey);
-		bool rightCancel  = Input.GetKeyUp(rightKey);
 		bool leftPressed  = Input.GetKeyDown(leftKey);
+		bool rightCancel  = Input.GetKeyUp(rightKey);
 		bool rightPressed = Input.GetKeyDown(rightKey);
+		bool runCancel    = Input.GetKeyUp(runKey);
+		bool runPressed   = Input.GetKeyDown(runKey);
 
 		//if the signal has been given to stop - STOP FIRST.
 		if(leftCancel || rightCancel) Move(0);
@@ -46,6 +57,10 @@ public class KeyboardControls : MonoBehaviour {
 		//otherwise start movin'!
 		else if(leftPressed)  Move(+1);
 		else if(rightPressed) Move(-1);
+
+		//update running modifier
+		if(runCancel)        running = false;
+		else if (runPressed) running = true;
 
 		//////////////////////////////////////////
 		// MOVEMENT TRANSFORM ////////////////////
@@ -55,7 +70,11 @@ public class KeyboardControls : MonoBehaviour {
 			// Vector3 currentPosition = transform.position;
 			// Vector3 nextPosition    = currentPosition + (speed * movement);
 			// transform.position      = nextPosition;
-			float direction = (speed * Time.deltaTime) * movement;
+			int multiplier  = running ? runspeed : 1;
+			float direction = ((speed * multiplier) * Time.deltaTime) * movement;
+
+			Debug.Log("speed : " + (speed * multiplier) + running);
+
 			transform.RotateAround(Vector3.zero, Vector3.up, direction);
 		}
 		
