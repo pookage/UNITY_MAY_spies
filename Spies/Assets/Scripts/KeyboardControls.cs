@@ -73,8 +73,4 @@ public class KeyboardControls : MonoBehaviour {
 		}
 		
 	}
-
-	void OnCollisionEnter(Collision col){
-		Debug.Log("agent seen!");
-	}
 }

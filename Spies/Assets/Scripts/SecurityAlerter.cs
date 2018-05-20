@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SecurityAlerter : MonoBehaviour {
 
-	void OnCollisionEnter(Collision collision){
-		Debug.Log("there's been a collision!");
+	void OnTriggerEnter(Collider other){
+		Debug.Log("BLOOP! BLOOP! BLOOP! AGENT SPOTTED!");
 	}
 }
