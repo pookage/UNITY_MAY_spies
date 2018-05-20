@@ -9,6 +9,9 @@ public class KeyboardControls : MonoBehaviour {
 	KeyCode leftKey;
 	KeyCode rightKey;
 
+	int movement  = 0;
+	Vector3 speed = new Vector3(0.1f, 0.0f, 0.0f);
+
 	void Start(){
 
 		bool leftHand  = hand == "Left";
@@ -32,19 +35,28 @@ public class KeyboardControls : MonoBehaviour {
 		else if(Input.GetKeyDown(leftKey))    MoveLeft();
 		else if(Input.GetKeyDown(rightKey))   MoveRight();
 
+		if(movement != 0){
+			Vector3 currentPosition = transform.position;
+			Vector3 nextPosition    = currentPosition + (speed * movement);
+			transform.position      = nextPosition;
+		}
 		
 	}
 
 	void MoveLeft(){
 		Debug.Log("Move left");
+		movement = -1;
+
 	}
 
 	void MoveRight(){
 		Debug.Log("Move right");
+		movement = 1;
 	}
 
 	void Stop(){
 		Debug.Log("Stop moving");
+		movement = 0;
 	}
 
 }
