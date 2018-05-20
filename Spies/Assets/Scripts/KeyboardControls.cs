@@ -14,27 +14,43 @@ public class KeyboardControls : MonoBehaviour {
 
 	void Start(){
 
-		bool leftHand  = hand == "Left";
-		bool rightHand = hand == "Right";
+		bool leftHand   = hand == "Left";
+		bool middleHand = hand == "Middle";
+		bool rightHand  = hand == "Right";
 
 		//left key
-		if(leftHand)  leftKey = KeyCode.A;
-		if(rightHand) leftKey = KeyCode.J;
+		if(leftHand)   leftKey = KeyCode.A;
+		if(rightHand)  leftKey = KeyCode.J;
+		if(middleHand) leftKey = KeyCode.F;
 
 		//right key
-		if(leftHand)  rightKey = KeyCode.D;
-		if(rightHand) rightKey = KeyCode.L;
+		if(leftHand)   rightKey = KeyCode.D;
+		if(rightHand)  rightKey = KeyCode.L;
+		if(middleHand) rightKey = KeyCode.H;
 	}
 
 	void Update(){
-		//if the signal has been given to stop - STOP FIRST.
-		if(Input.GetKeyUp(leftKey) || Input.GetKeyUp(rightKey)){
-			Stop();
-		} 
-		//otherwise start movin'!
-		else if(Input.GetKeyDown(leftKey))    MoveLeft();
-		else if(Input.GetKeyDown(rightKey))   MoveRight();
+		
+		////////////////////////////////////////
+		// INPUT LOOKUP ////////////////////////
+		////////////////////////////////////////
+		//check all of the necessary inputs
+		bool leftCancel   = Input.GetKeyUp(leftKey);
+		bool rightCancel  = Input.GetKeyUp(rightKey);
+		bool leftPressed  = Input.GetKeyDown(leftKey);
+		bool rightPressed = Input.GetKeyDown(rightKey);
 
+		//if the signal has been given to stop - STOP FIRST.
+		if(leftCancel || rightCancel) Move(0);
+			
+		//otherwise start movin'!
+		else if(leftPressed)  Move(-1);
+		else if(rightPressed) Move(+1);
+
+		//////////////////////////////////////////
+		// MOVEMENT TRANSFORM ////////////////////
+		//////////////////////////////////////////
+		//as long as there is movement, then apply it
 		if(movement != 0){
 			Vector3 currentPosition = transform.position;
 			Vector3 nextPosition    = currentPosition + (speed * movement);
@@ -43,20 +59,7 @@ public class KeyboardControls : MonoBehaviour {
 		
 	}
 
-	void MoveLeft(){
-		Debug.Log("Move left");
-		movement = -1;
-
+	void Move(int direction){
+		movement = direction;
 	}
-
-	void MoveRight(){
-		Debug.Log("Move right");
-		movement = 1;
-	}
-
-	void Stop(){
-		Debug.Log("Stop moving");
-		movement = 0;
-	}
-
 }
