@@ -1,12 +1,13 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class KeyboardControls : MonoBehaviour {
 
-	public string hand       = "Left";
-	public int speed         = 20;
-	public int runMultiplier = 2;
+	public string hand        = "Left";
+	public int speed_sideways = 20;
+	public int speed_forwards = 1;
+	public int runMultiplier  = 2;
 
 	KeyCode leftKey;
 	KeyCode rightKey;
@@ -68,9 +69,18 @@ public class KeyboardControls : MonoBehaviour {
 		if(movement != 0){
 			//calculate move direction
 			int multiplier  = running ? runMultiplier : 1;
-			float direction = ((speed * multiplier) * Time.deltaTime) * movement;
-			transform.RotateAround(Vector3.zero, Vector3.up, direction);
+			float rotation = ((speed_sideways * multiplier) * Time.deltaTime) * movement;
+			transform.RotateAround(Vector3.zero, Vector3.up, rotation);
+			transform.position = Vector3.MoveTowards(
+				transform.position, 
+				new Vector3(0,0,0), 
+				((speed_forwards * multiplier) * Time.deltaTime)
+			);
 		}
 		
+	}
+
+	void OnCollisionEnter(Collision col){
+		Debug.Log("agent seen!");
 	}
 }
